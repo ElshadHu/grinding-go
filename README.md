@@ -7,3 +7,4 @@ Practising low-level design in Go. Building things from scratch, understanding t
 | # | Problem | Status |
 |---|---------|--------|
 | 01 | LRU Cache| + |
+| 02 | Rate Limiter | + |

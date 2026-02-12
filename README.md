@@ -9,3 +9,4 @@ Practising low-level design in Go. Building things from scratch, understanding t
 | 01 | LRU Cache| + |
 | 02 | Rate Limiter | + |
 | 03 | Pub Sub      | + |
+| 04 |  URL Shortener | + |

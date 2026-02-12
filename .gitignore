@@ -33,3 +33,4 @@ go.work.sum
 lru-cache
 rate-limiter
 pub-sub
+url-shortener

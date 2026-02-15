@@ -2,8 +2,13 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
+)
+
+var (
+	ErrBroadcastFull = errors.New("broadcast channel full")
 )
 
 // Represents a connected entity
@@ -22,9 +27,21 @@ func NewClient(hub *Hub) *Client {
 	}
 }
 
-func (c *Client) Connect() {
-	c.hub.register <- c
-	<-c.registered // blocks until hub calls close(c.registered)
+func (c *Client) Connect(ctx context.Context) error {
+	select {
+	case c.hub.register <- c:
+		// sent to hub
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
+	// Wait for hub to confirm registration
+	select {
+	case <-c.registered:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }
 
 // Disconnect unregisters the client and even if multiple times disconnect is called
@@ -41,8 +58,13 @@ func (c *Client) Disconnect() {
 }
 
 func (c *Client) Send(message []byte) error {
-	c.hub.broadcast <- message
-	return nil
+	select {
+	case c.hub.broadcast <- message:
+		return nil
+	default:
+		return ErrBroadcastFull
+
+	}
 }
 
 // Listen is waiting for messages to arrive
@@ -138,9 +160,18 @@ func main() {
 	client2 := NewClient(hub)
 	client3 := NewClient(hub)
 	// Register with hub first
-	client1.Connect()
-	client2.Connect()
-	client3.Connect()
+	if err := client1.Connect(ctx); err != nil {
+		fmt.Printf("client1 failed to connect: %v\n", err)
+		return
+	}
+	if err := client2.Connect(ctx); err != nil {
+		fmt.Printf("client2 failed to connect: %v\n", err)
+		return
+	}
+	if err := client3.Connect(ctx); err != nil {
+		fmt.Printf("client3 failed to connect: %v\n", err)
+		return
+	}
 
 	var listenWg sync.WaitGroup
 	listenWg.Add(3)

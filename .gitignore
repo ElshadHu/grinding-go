@@ -35,3 +35,4 @@ rate-limiter
 pub-sub
 url-shortener
 in-memory-kv-store
+message-broadcaster

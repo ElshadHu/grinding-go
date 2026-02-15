@@ -6,9 +6,6 @@ import (
 	"sync"
 )
 
-// Does client need to check before registering?
-// Hub is not running
-
 // Represents a connected entity
 type Client struct {
 	hub        *Hub

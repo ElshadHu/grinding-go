@@ -37,3 +37,4 @@ url-shortener
 in-memory-kv-store
 message-broadcaster
 connection-pool
+consistent-hashing

@@ -170,6 +170,7 @@ func (p *Pool) cleanerLoop() {
 // Close shuts down the pool
 func (p *Pool) Close() {
 	p.mu.Lock()
+	defer p.mu.Unlock()
 	if p.closed {
 		p.mu.Unlock()
 		return
@@ -181,9 +182,9 @@ func (p *Pool) Close() {
 		ic.conn.Close()
 	}
 	p.idleConns = nil
-	p.mu.Unlock()
 }
 
+// PoolConn wraps a net.Conn so that Close() returns the conn to the pool instead of closing it
 type PoolConn struct {
 	net.Conn
 	pool     *Pool
@@ -192,6 +193,7 @@ type PoolConn struct {
 	mu       sync.Mutex // protects unusable and closed flags
 }
 
+// Close returns the conn to the pull or destroys it if it marked unusuable
 func (pc *PoolConn) Close() error {
 	pc.mu.Lock()
 	defer pc.mu.Unlock()

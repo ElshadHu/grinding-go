@@ -14,3 +14,4 @@ Practising low-level design in Go. Building things from scratch, understanding t
 | 06 | Message Broadcaster | + |
 | 07 | Connection Pool | + |
 | 08 | Consistent Hashing | + |
+| 09 | Logger System | + |

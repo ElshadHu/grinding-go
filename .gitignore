@@ -38,3 +38,7 @@ in-memory-kv-store
 message-broadcaster
 connection-pool
 consistent-hashing
+logger-system
+
+# Log files
+*.log

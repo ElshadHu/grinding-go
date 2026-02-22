@@ -39,6 +39,7 @@ message-broadcaster
 connection-pool
 consistent-hashing
 logger-system
+worker-pool
 
 # Log files
 *.log

@@ -16,3 +16,4 @@ Practising low-level design in Go. Building things from scratch, understanding t
 | 08 | Consistent Hashing | + |
 | 09 | Logger System | + |
 | 10 | Worker Pool | + |
+| 11 | Load Balancer | + |
